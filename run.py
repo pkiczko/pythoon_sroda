@@ -30,9 +30,15 @@ def home():
 
 @app.route('/', methods=['POST'])   #tutaj akcja jest w przypadku gdy uzytkownik przekaze jakies dane do serwera
 def my_form_post():
-    text = request.form['text']     #zapisanie danych uzytkownika do zmiennej
+    text = request.form['text']
+    text2 = request.form['text2']
+    text3 = request.form['text3']
+    checkbox1 = request.form['checkbox1']
+    color = request.form['color']
+                                    #zapisanie danych uzytkownika do zmiennej
     processed_text = text.upper()   #zmiana danych wprowadzonych (wszystkie male litery na duze)
-    return processed_text           #po komendzie 'post' (submit, przeslij), serwer przetwarza dane i daje odpowiedz
+    return '<p style="color:' + color + ';">'+processed_text + text2 + text3 + ' Wybrany kolor: ' + color +'</p>'
+    #po komendzie 'post' (submit, przeslij), serwer przetwarza dane i daje odpowiedz
 
 @app.route('/innastrona')           #analogicznie, przy sciezce dostepowej do serwera z dopiskiem /innastrona
 def innastrona():
