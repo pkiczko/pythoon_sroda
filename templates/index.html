@@ -7,12 +7,22 @@ Menu, Data, COSTAM
 <Main>
 Wiadomosci, info etc<br> 
 <form method="POST">
-    <label for="text">Podaj imię:</label>
-    <input id='text' name="text"> <br>
-    <input name="text2">
-    <input name="text3">
-    <input type=checkbox name='checkbox1'>
-    <input type="color" name='color'>
+    <label for="imie">Podaj imię:</label>
+    <input id='imie' name="osoba_imie"> <br>
+    
+    <label for="nazwisko">Podaj nazwisko:</label>
+    <input id='nazwisko' name="osoba_nazwisko"> <br>
+
+    <label for="kolorek">Wybierz kolor:</label>
+    <input id="kolorek" type="color" name='color'><br>
+
+    <label for="data">Ulubiony dzien w roku:</label>
+    <input id="data" type="date" name='pole_daty'><br>
+
+    <label for="email">Adres e-mail:</label>
+    <input id="email" type="email" name='adres_email'><br>
+
+
     <input type="submit">
 </form>
 
