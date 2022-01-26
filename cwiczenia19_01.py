@@ -74,19 +74,88 @@ najczestsze_slowo = max(slownik, key=slownik.get) #wyświetla najczęściej uży
 print(najczestsze_slowo,' - ilosc wystapien: ', slownik[najczestsze_slowo] )
 
 #http://analityk.edu.pl/sortowanie-babelkowe/
-#niedokończone
+#sortowanie bąbelkowe
 
-A = [2,1,5,3,6]
+A = [2,1,5,3,6,0]
+B = [2,1,5,3,6,0]
 #max2 = 0
 #min2 = 0
 print('dlugosc A: ', len(A))
-for i in range(0,len(A)):
-    if i <= (len(A)-1) and A[i] > A[i+1]:
-        max2 = A[i]
-        A[i] = A[i+1]
-        A[i+1] = max2
-    
+zmiany=None
+iteracje = 0
+
+while zmiany!=0:
+    zmiany = 0   #jeśli zmian 0 w całej iteracji, wyjdzie z pętli while
+    iteracje +=1 #dla naszej informacji, ile razy pętla while była użyta
+    print(iteracje, " - numer iteracji")
+    print(A)
+    for i in range(0,len(A)-1): #porównuje kolejne elementy lista, przestawia wg wielkości    
+        if A[i] > A[i+1]:
+            zmiany += 1            
+            A[i], A[i+1] = A[i+1], A[i] #zamiana miejscami 2 wartości w liście
+
 print(A)
+#rozwiązanie w 2óch linijkach
+B.sort()
+print("Rozwiązanie z użyciem funkcji sort(): ", B)
+
+#http://analityk.edu.pl/suma-dwoch-liczb/
+#czy suma dwóch elementów listy i których równa 9
+S = [1,3,5,2,11,7]
+    #0,1,2,3, 4,5] - indeksy listy
+suma9 = False #fałsz
+print('Długość S to : ', len(S))
+print(S[len(S)-2])
+for i in range(0, len(S)-1): #największe i powinno być przedostatnim elementem na liście
+    #i = 0 - pierwsza iteracja
+    #i = 1 - druga iteracja tej pętli
+    for j in range(i+1, len(S)):
+        #i=0, j=0 - 1wsza iteracja 
+        #i=0, j=1 - 2ga iteracja
+        print("Pary liczb użyte: ", S[i], ', ', S[j])
+        if S[i] + S[j] == 9:
+            print("Znalazłem elementy których suma to 9! Są to: ", S[i], " oraz ", S[j] )
+            suma9 = True #prawda
+print("Czy któreś dwie liczby dają sumę 9? : ", suma9)
+
+#http://analityk.edu.pl/rzut-moneta-z-python/
+#Gra w orła i reszkę
+import time #Biblioteka czasu, dla wprowadzania opóźnień
+import random
+
+def menu():#definiowanie funkcji
+    print("##################")
+    print("0. Zakończ program")
+    print("1. Wybierz Reszkę")
+    print("2. Wybierz Orła")
+    print("")
+def odliczanie():
+    print("3!")
+    time.sleep(1) #opóźnienie 1s
+    print("2!")
+    time.sleep(1) #opóźnienie 1s
+    print("1!")
+    time.sleep(1) #opóźnienie 1s
+def wybor_gracza(i):
+    if i == 2:
+        return "reszka"
+    if i == 1:
+        return "orzeł"
+
+x = None
+wynik = {"gracz":0, "komputer":0}
+while x!=0:
+    
+    menu()
+    x = input("Podaj opcję: ")
+    odliczanie()
+    if random.choice(["orzeł", "reszka"]) == wybor_gracza(x):
+        wynik.gracz += 1
+    else:
+        wynik.komputer += 1
+    #1den Reszka, 2 orzeł
+
+    print("Wynik: ", wynik)
         
 
 
