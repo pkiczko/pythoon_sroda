@@ -1,5 +1,6 @@
 import pygame
-  
+from random import random
+
 # uruchomienie biblioteki pygame
 pygame.init()
   
@@ -15,15 +16,27 @@ Y = 500
 display_surface = pygame.display.set_mode((X, Y ))
   
 # ustawienie nazwy okna modułu pygame
-pygame.display.set_caption('Image')
+pygame.display.set_caption('Czołgi')
   
 # stworzenie obiektu na płaszczyźnie okna
 tank = pygame.image.load(r'tank.png')   #przypisanie zmiennej tank zdjecia
 tank = pygame.transform.scale(tank, (40, 30))  #zmiana rozmiaru zdjecia do 40 na 30 pikseli
 #zmienne mówiące o początkowej pozycji czołgu
-tank_pos_x = 200    
-tank_pos_y = 380
+
+minx = 20
+maxx = 380 #940 dla full HD
+#formula na losowa liczbe miedzy min a max:
+losowa = minx + (random() * (maxx - minx))
+
+tank_pos_x = losowa #1920 podzielone na 2 960 - gracz miedzy 20 a 940 (20 pixeli szerokosc czolgu)
+tank_pos_y = 380 #poki co mamy jedna plaszczyzne, wysokosc taka sama
+nachylenie = 0
+pygame.font.init()
+myfont = pygame.font.SysFont('Comic Sans MS', 30)
+textsurface = myfont.render('Kąt nachylenia: {}'.format(nachylenie), True, (111,111, 111))
+
 # niekończąca się pętla
+
 while True :
     
     # wypełnienie okna kolorem białym
@@ -32,7 +45,10 @@ while True :
     # kopiowanie obiektu do płaszczyzny na pozycję
     #(tank_pos_x, tank_pos_y)
     display_surface.blit(tank, (tank_pos_x, tank_pos_y))
+    display_surface.blit(textsurface, (40, 50))
+
     pygame.draw.rect(display_surface,green,[00,410,800,100])
+    
     # pętla przez zdarzenia (np naciśnięcie klawisza)
     for event in pygame.event.get() :
         if event.type == pygame.KEYDOWN: #nasłuchiwanie klawiszy
@@ -41,8 +57,11 @@ while True :
                 pygame.draw.rect(display_surface,rosso,[100,100,100,100])
             if event.key == pygame.K_UP:
                 print("UP")
+                nachylenie += 1
+                textsurface = myfont.render('Kąt nachylenia: {}'.format(nachylenie), True, (111,111, 111))
             if event.key == pygame.K_DOWN:
-                print("DOWN")
+                nachylenie += -1
+                textsurface = myfont.render('Kąt nachylenia: {}'.format(nachylenie), True, (111,111, 111))
             if event.key == pygame.K_LEFT:
                 print("LEFT")
                 tank_pos_x+=-2
