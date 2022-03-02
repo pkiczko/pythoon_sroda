@@ -27,13 +27,15 @@ display_surface = pygame.display.set_mode((X, Y ))
 pygame.display.set_caption('Czołgi')
   
 # stworzenie obiektu na płaszczyźnie okna
-tank = pygame.image.load(r'tank.png')   #przypisanie zmiennej tank zdjecia
+tank = pygame.image.load(r'tank.png').convert_alpha()   #przypisanie zmiennej tank zdjecia
 tank = pygame.transform.scale(tank, (40, 30))  #zmiana rozmiaru zdjecia do 40 na 30 pikseli
 pocisk = pygame.draw.circle(display_surface, rosso, (100,100), 20)
 strzal = pygame.mixer.Sound("sf_cannon_01.mp3")
-
+#czołg przeciwnika
+enemy_tank = pygame.image.load(r'tank.png').convert_alpha()   #przypisanie zmiennej tank zdjecia
+enemy_tank = pygame.transform.scale(enemy_tank, (40, 30))
+enemy_tank = pygame.transform.flip(enemy_tank, True, False)
 #zmienne mówiące o początkowej pozycji czołgu
-
 minx = 20
 maxx = 380 #940 dla full HD
 #formula na losowa liczbe miedzy min a max:
@@ -42,6 +44,16 @@ losowa = minx + (random() * (maxx - minx))
 tank_pos_x = losowa #1920 podzielone na 2 960 - gracz miedzy 20 a 940 (20 pixeli szerokosc czolgu)
 tank_pos_y = 380 #poki co mamy jedna plaszczyzne, wysokosc taka sama
 nachylenie = 0
+
+#zmienne mówiące o początkowej pozycji czołgu
+enemy_minx = 500
+enemy_maxx = 750 #940 dla full HD
+#formula na losowa liczbe miedzy min a max:
+enemy_losowa = enemy_minx + (random() * (enemy_maxx - enemy_minx))
+etank_pos_x = enemy_losowa 
+etank_pos_y = 380
+
+
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
 textsurface = myfont.render('Kąt nachylenia: {}'.format(nachylenie), True, (155,155,155))
@@ -57,7 +69,8 @@ while True :
     #(tank_pos_x, tank_pos_y)
     display_surface.blit(tank, (tank_pos_x, tank_pos_y))
     display_surface.blit(textsurface, (40, 50))
-
+    display_surface.blit(enemy_tank, (etank_pos_x, etank_pos_y))
+    mx, my = pygame.mouse.get_pos()
     
     #move_ticker = 0
     predkosc = 1
@@ -68,6 +81,7 @@ while True :
             if event.key == pygame.K_SPACE: #jeśli spacja naciśnięta to:
                 print("BOOM!")
                 strzal.play()
+                pociski.append([event.pos[0]-32, 500])
                 pygame.draw.rect(display_surface,rosso,[100,100,100,100])
 
             if event.key == pygame.K_UP:
@@ -117,6 +131,12 @@ while True :
                 quit()
   
         #ustawienie zegara
-        clock.tick(10)
+    clock.tick(10)
         # rysowanie obiektów na ekranie
-        pygame.display.update()
+    pygame.display.update()
+
+    for b in range(len(pociski)):
+        pociski[b][0] -= 10
+    for p in pociski[:]:
+        if p[0] < 0:
+            pociski.remove(p)
