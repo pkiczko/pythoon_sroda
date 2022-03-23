@@ -1,21 +1,23 @@
 from numpy import random
+import math as m
 
-result = random.randint(4)
+result = random.randint(20)
 print(result)
 
 
 #Przydatne komendy
 a=1
 b='Be'
-c=[1,"element", "mango", 0.314159]
+c=[ 1,"element", "mango", 0.314159]
+#   0       1       2           3
 dict={"element":"płoza", "teren": "górka", "wysokość": 5}
 e=2.71828
-fałsz=False
+fałsz=False #int(False)
 tup=(1,2,3,"cztery")
 
 print(type(a))      #<class 'int'>
 print(type(b))      #<class 'str'>
-print(type(c))      #<class 'list'>
+print(type(c))      #<class 'list'> #print(type(c[1]))
 print(type(dict))   #<class 'dict'>
 print(type(e))      #<class 'float'>
 print(type(fałsz))  #<class 'bool'>
@@ -36,11 +38,14 @@ print("1 \t Powietrze \t 22.12.2020 \t -\n")
 # Zmiana string'a na listę: split(), list()   - źródło materiałów: https://github.com/Asabeneh/Python-for-Everyone
 
 #tzw. conditionals - warunki~
+#https://github.com/Asabeneh/Python-for-Everyone
+
 print('True == True: ', True == True)
 print('True == False: ', True == False)
 print('False == False:', False == False)
 print('True and True: ', True and True)
-print('True or False:', True or False)
+print('True and False: ', True and False) #obydwa warunki musza byc spelnione
+print('True or False:', True or False)      #tylko 1den musi byc spelniony
 print('a in an:', 'a' in 'an')
 
 
