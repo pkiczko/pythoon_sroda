@@ -13,3 +13,10 @@ match x:
         print("switch: x to dwa")
     case _:
         print("switch: Komunitak dla każdego innego x")
+
+biblioteka={
+    1:"tekst1", 2:"tekst2"
+    }
+    #dla funkcji.get("domyślna wartość")
+print(biblioteka[x])
+#https://stackoverflow.com/questions/21962763/using-a-dictionary-as-a-switch-statement-in-python
