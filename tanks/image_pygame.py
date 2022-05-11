@@ -70,20 +70,28 @@ def narysujOknoGry():
     display_surface.blit(tank, (tank_pos_x, tank_pos_y))
     display_surface.blit(textsurface, (40, 50))
     display_surface.blit(enemy_tank, (etank_pos_x, etank_pos_y))
-    
+    #display_surface.blit(pocisk, (pociski[0][0], pociski[0][1]))
+    #display_surface.blit(pocisk, (ball['pos']['x'], ball['pos']['y']))    
     clock.tick(60)
     pygame.display.update()
-
+def narysujOknoGry2(x, y):
+    display_surface.fill(white)
+    pygame.draw.rect(display_surface,green,[00,410,800,100]) #rysowanie tła
+    display_surface.blit(tank, (tank_pos_x, tank_pos_y))
+    display_surface.blit(textsurface, (40, 50))
+    display_surface.blit(enemy_tank, (etank_pos_x, etank_pos_y))
+    display_surface.blit(pocisk, (x, y))
+    pygame.display.update() 
 #stałe dt. pocisku
-ball={'m': 1, 'v':[0,0], 'pos':{'x': losowa, 'y':390}}
+ball={'m': 1, 'v':[0,0], 'pos':{'x': tank_pos_x, 'y':370}}
 g=-9.8
-v0=8
+v0=80
 theta=nachylenie*3.14158/180        #masa kuli
 ball['v']=[v0*math.cos(theta),v0*math.sin(theta)]    #wektor prędkości kuli
 print(ball)
 t=0
-dt=0.01
-
+dt=0.1
+zmiana = 20
 # niekończąca się pętla
 
 while True :
@@ -100,18 +108,22 @@ while True :
             if event.key == pygame.K_SPACE: #jeśli spacja naciśnięta to:
                 print("BOOM!")
                 strzal.play()
-                while ball['pos']['y']>=380:
+                while ball['pos']['y']<=400:
                     clock.tick(100)
                     F=ball['m']*g
-                    ball['v'][1]=ball['v'][1]-(F/ball['m'])*dt
-                    ball['pos']['x']=ball['pos']['x']+ball['v'][0]*dt/ball['m']
-                    ball['pos']['y']=ball['pos']['y']-ball['v'][1]*dt/ball['m']
-                    t=t+dt
+                    print(ball['v'][1])
+                    ball['v'][1]+=(F/ball['m'])*dt #predkosc gor/dol
+                    ball['pos']['x']+=ball['v'][0]*dt
+                    ball['pos']['y']-=ball['v'][1]*dt
+                    t+=dt
+                    #F=ma
+                    #S=at^2/2
                     print(ball)
-                    display_surface.blit(pocisk, (ball['pos']['x'], ball['pos']['y']))
+                    narysujOknoGry2(ball['pos']['x'], ball['pos']['y'])
+                    
                 pociski.append([losowa+10, 390])
                 print(ball)#"Pociski =",pociski[0][0], pociski[0][1])
-                display_surface.blit(pocisk, (pociski[0][0], pociski[0][1]))
+                
 
             if event.key == pygame.K_UP:
                 if nachylenie == 90:
@@ -151,13 +163,23 @@ while True :
                     tank = pygame.transform.flip(tank, True, False)
                     kierunek_czolgu = False #obracamy czołg
                     #display_surface.blit(tank, (tank_pos_x, tank_pos_y))
-                tank_pos_x+=-2
+                if (zmiana == 0):
+                    print("Dalej nie pojedziesz w tej rundzie!")
+                else:
+                    tank_pos_x+=-2
+                    zmiana -= 1
+                ball['pos']['x']=tank_pos_x
             if event.key == pygame.K_RIGHT:
                 if kierunek_czolgu == False: #jesli obrocony w lewo
                     tank = pygame.transform.flip(tank, True, False)
                     kierunek_czolgu = True  #obracamy czołg
                     #display_surface.blit(tank, (tank_pos_x, tank_pos_y))
-                tank_pos_x+=2
+                if (zmiana == 0):
+                    print("Dalej nie pojedziesz w tej rundzie!")
+                else:
+                    tank_pos_x+=2
+                    zmiana -= 1
+                ball['pos']['x']=tank_pos_x
             if event.key == pygame.K_F4: #przy nacisnieciu F4 wychodzi z gry
                 # odłączenie biblioteki pygame
                 pygame.quit()
