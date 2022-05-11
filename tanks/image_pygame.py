@@ -28,14 +28,16 @@ display_surface = pygame.display.set_mode((X, Y ))
 pygame.display.set_caption('Czołgi')
   
 # stworzenie obiektu na płaszczyźnie okna
-tank = pygame.image.load(r'tank.png').convert_alpha()   #przypisanie zmiennej tank zdjecia
+tank = pygame.image.load(r'./tanks/tank.png').convert_alpha()   #przypisanie zmiennej tank zdjecia
 tank = pygame.transform.scale(tank, (40, 30))  #zmiana rozmiaru zdjecia do 40 na 30 pikseli
-pocisk = pygame.Surface((60, 60), pygame.SRCALPHA)
+pocisk = pygame.image.load(r'./tanks/tank.png').convert_alpha()
+pocisk = pygame.transform.scale(pocisk, (10, 8))
+#pygame.Surface((60, 60), pygame.SRCALPHA)
 pygame.draw.circle(pocisk, [255,0,0], [30, 30], 30)
 #pocisk = pygame.draw.circle(display_surface, rosso, (100,100), 20).convert_alpha()
-strzal = pygame.mixer.Sound("sf_cannon_01.mp3")
+strzal = pygame.mixer.Sound("./tanks/sf_cannon_01.mp3")
 #czołg przeciwnika
-enemy_tank = pygame.image.load(r'tank.png').convert_alpha()   #przypisanie zmiennej tank zdjecia
+enemy_tank = pygame.image.load(r'./tanks/tank.png').convert_alpha()   #przypisanie zmiennej tank zdjecia
 enemy_tank = pygame.transform.scale(enemy_tank, (40, 30))
 enemy_tank = pygame.transform.flip(enemy_tank, True, False)
 #zmienne mówiące o początkowej pozycji czołgu
@@ -78,6 +80,7 @@ g=-9.8
 v0=8
 theta=nachylenie*3.14158/180        #masa kuli
 ball['v']=[v0*math.cos(theta),v0*math.sin(theta)]    #wektor prędkości kuli
+print(ball)
 t=0
 dt=0.01
 
@@ -98,6 +101,7 @@ while True :
                 print("BOOM!")
                 strzal.play()
                 while ball['pos']['y']>=380:
+                    clock.tick(100)
                     F=ball['m']*g
                     ball['v'][1]=ball['v'][1]-(F/ball['m'])*dt
                     ball['pos']['x']=ball['pos']['x']+ball['v'][0]*dt/ball['m']
@@ -105,34 +109,39 @@ while True :
                     t=t+dt
                     print(ball)
                     display_surface.blit(pocisk, (ball['pos']['x'], ball['pos']['y']))
-                #pociski.append([losowa+10, 390])
-                print("Pociski =",pociski[0][0], pociski[0][1])
+                pociski.append([losowa+10, 390])
+                print(ball)#"Pociski =",pociski[0][0], pociski[0][1])
                 display_surface.blit(pocisk, (pociski[0][0], pociski[0][1]))
-                pygame.draw.rect(display_surface,rosso,[100,100,100,100])
 
             if event.key == pygame.K_UP:
                 if nachylenie == 90:
                     print("Osiągnęto maksymalne nachylenie!")
                 else:
                     nachylenie += predkosc
+                    theta=nachylenie*3.14158/180        
+                    ball['v']=[v0*math.cos(theta),v0*math.sin(theta)]
                     if nachylenie > 90: #w razie przekroczenia 180 stopni
                         nachylenie = 90
                     predkosc *= 4
                     textsurface = myfont.render('Kąt nachylenia: {}'.format(nachylenie), True, (111,111, 111))
             else:
                 predkosc = 1
-            
             if event.key == pygame.K_DOWN:
                 if nachylenie == 0:
+                    theta=nachylenie*3.14158/180        #masa kuli
+                    ball['v']=[v0*math.cos(theta),v0*math.sin(theta)]
                     print("Osiągnęto minimalne nachylenie!")
                 else:
                     nachylenie -= predkosc
+                    theta=nachylenie*3.14158/180        #masa kuli
+                    ball['v']=[v0*math.cos(theta),v0*math.sin(theta)]
                     if nachylenie < 0: #w razie przekroczenia 180 stopni
                         nachylenie = 0
                     predkosc *= 4
                     textsurface = myfont.render('Kąt nachylenia: {}'.format(nachylenie), True, (111,111, 111))
             else:
                 predkosc = 1
+
             '''if (event.key == pygame.K_DOWN and event.key == pygame.K_LSHIFT):
                 nachylenie -= 10
                 textsurface = myfont.render('Kąt nachylenia: {}'.format(nachylenie), True, (111,111, 111))
