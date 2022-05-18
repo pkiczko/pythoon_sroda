@@ -75,11 +75,11 @@ def narysujOknoGry():
     clock.tick(60)
     pygame.display.update()
 def narysujOknoGry2(x, y):
-    display_surface.fill(white)
-    pygame.draw.rect(display_surface,green,[00,410,800,100]) #rysowanie tła
-    display_surface.blit(tank, (tank_pos_x, tank_pos_y))
+    #display_surface.fill(white)
+    #pygame.draw.rect(display_surface,green,[00,410,800,100]) #rysowanie tła
+    #display_surface.blit(tank, (tank_pos_x, tank_pos_y))
     display_surface.blit(textsurface, (40, 50))
-    display_surface.blit(enemy_tank, (etank_pos_x, etank_pos_y))
+    #display_surface.blit(enemy_tank, (etank_pos_x, etank_pos_y))
     display_surface.blit(pocisk, (x, y))
     pygame.display.update() 
 #stałe dt. pocisku
