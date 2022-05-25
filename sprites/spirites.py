@@ -1,12 +1,13 @@
  
 # Pygame sprite Example
 import pygame
+from pygame.locals import *
 import random
 import time
 
 WIDTH = 800
 HEIGHT = 600
-FPS = 30
+FPS = 120
 
 # define colors
 WHITE = (255, 255, 255)
@@ -53,12 +54,15 @@ class Klocek(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((10, 10))
         self.image.fill(GREEN)
+        self.stop=False
         self.rect = self.image.get_rect()
         self.rect.center=(pos_x,pos_y)
 
     def update(self):
-        if self.rect.y <= 580:
-            self.rect.y += 5
+        collide = [s for s in pygame.sprite.spritecollide(self, self.groups()[0], False, pygame.sprite.collide_mask) if s != self]
+        if (self.rect.y <= 580 and self.stop == False and not collide):
+            self.rect.y += 1
+
         
 class Player(pygame.sprite.Sprite):
     # sprite for the Player
@@ -102,17 +106,24 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Sprite Example")
 clock = pygame.time.Clock()
 
+all_blocks = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 player = Player()
 enemy = Player()
-klocek=Klocek(300,300)
+klocek1=Klocek(400,00)
+klocek2=Klocek(411,200)
+klocek3=Klocek(404,100)
+klocek4=Klocek(410,320)
 frog = Frog(200,200)
 enemy.rect.x = 100
 enemy.rect.y = 100
 all_sprites.add(player)
 all_sprites.add(enemy)
 all_sprites.add(frog)
-all_sprites.add(klocek)
+all_blocks.add(klocek1)
+all_blocks.add(klocek2)
+all_blocks.add(klocek3)
+all_blocks.add(klocek4)
 # Game loop
 running = True
 speed = 2
@@ -120,7 +131,10 @@ while running: #petla gry
     # keep loop running at the right speed
     clock.tick(FPS)
     # Process input (events)
-    
+    '''for klocek in all_blocks:
+            gets_hit = pygame.sprite.spritecollideany(klocek, all_blocks)
+            if klocek == gets_hit:
+                klocek.stop = True'''
     for event in pygame.event.get():
         # check for closing window
         if event.type == pygame.QUIT:
@@ -148,9 +162,10 @@ while running: #petla gry
         running = False
     # Update
     all_sprites.update()
-
+    all_blocks.update()
     # Draw / render
     screen.fill(BLACK)
+    all_blocks.draw(screen)
     all_sprites.draw(screen)
     # *after* drawing everything, flip the display
     pygame.display.flip()
