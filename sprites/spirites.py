@@ -15,6 +15,51 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
+
+class Frog(pygame.sprite.Sprite):
+	def __init__(self, pos_x, pos_y):
+		super().__init__()
+		self.attack_animation = False
+		self.sprites = []
+		self.sprites.append(pygame.image.load('./sprites/attack_1.png'))
+		self.sprites.append(pygame.image.load('./sprites/attack_2.png'))
+		self.sprites.append(pygame.image.load('./sprites/attack_3.png'))
+		self.sprites.append(pygame.image.load('./sprites/attack_4.png'))
+		self.sprites.append(pygame.image.load('./sprites/attack_5.png'))
+		self.sprites.append(pygame.image.load('./sprites/attack_6.png'))
+		self.sprites.append(pygame.image.load('./sprites/attack_7.png'))
+		self.sprites.append(pygame.image.load('./sprites/attack_8.png'))
+		self.sprites.append(pygame.image.load('./sprites/attack_9.png'))
+		self.sprites.append(pygame.image.load('./sprites/attack_10.png'))
+		self.current_sprite = 0
+		self.image = self.sprites[self.current_sprite]
+
+		self.rect = (pos_x, pos_y, 50, 50)  
+
+	def attack(self):
+		self.attack_animation = True
+
+	def update(self):
+		if self.attack_animation == True:
+			self.current_sprite += 0.25
+			if int(self.current_sprite) >= len(self.sprites):
+				self.current_sprite = 0
+				self.attack_animation = False
+		self.image = self.sprites[int(self.current_sprite)]
+class Klocek(pygame.sprite.Sprite):
+    # sprite for the Player
+    def __init__(self, pos_x, pos_y):
+        # this line is required to properly create the sprite
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((10, 10))
+        self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
+        self.rect.center=(pos_x,pos_y)
+
+    def update(self):
+        if self.rect.y <= 580:
+            self.rect.y += 5
+        
 class Player(pygame.sprite.Sprite):
     # sprite for the Player
     def __init__(self):
@@ -44,6 +89,10 @@ class Player(pygame.sprite.Sprite):
             self.image.fill(RED)
         else:
             self.image.fill(GREEN)
+        if self.rect.colliderect(frog.rect):
+            self.image.fill(WHITE)
+            frog.attack()
+        
 
 
 # initialize pygame and create window
@@ -56,10 +105,14 @@ clock = pygame.time.Clock()
 all_sprites = pygame.sprite.Group()
 player = Player()
 enemy = Player()
+klocek=Klocek(300,300)
+frog = Frog(200,200)
 enemy.rect.x = 100
 enemy.rect.y = 100
 all_sprites.add(player)
 all_sprites.add(enemy)
+all_sprites.add(frog)
+all_sprites.add(klocek)
 # Game loop
 running = True
 speed = 2
@@ -73,6 +126,8 @@ while running: #petla gry
         if event.type == pygame.QUIT:
             running = False
     keys_pressed = pygame.key.get_pressed()
+    if keys_pressed[pygame.K_SPACE]:
+        frog.attack()
     if keys_pressed[pygame.K_RIGHT]:
         player.rect.x+=5
         #if player.rect.right == enemy.rect.left:
