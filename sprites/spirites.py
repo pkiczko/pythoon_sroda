@@ -2,8 +2,9 @@
 # Pygame sprite Example
 import pygame
 from pygame.locals import *
-import random
+from random import random
 import time
+import math
 
 WIDTH = 800
 HEIGHT = 600
@@ -16,6 +17,64 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
+#funkcja wyliczająca dystans między dwoma punktami
+def dystans(pkt1, pkt2): #wymaga biblioteki math - import math
+    return ((pkt1[0]-pkt2[0])**2+(pkt1[1]-pkt2[1])**2)**0.5 #w przypadku pierwiastka 3ciego stopnia (1/3)
+
+def losx():
+    return int(random() * 800)
+def losy():
+    return int(random() * 600)
+def losowy_punkt():
+    return [int(random() * 800), int(random() * 600)]
+zbior_elementow = []
+#losowa_x1 = losx()
+#losowa_y1 = losy()
+pierwszy_punkt = losowy_punkt()
+zbior_elementow.append(pierwszy_punkt) #dodaliśmy 1den punkt do zbioru (wsp. x oraz y)
+#print(zbior_elementow)
+#print('losowy pkt: ', losowy_punkt())
+#ilosc_losowych = 1
+#losowa_x2 = losx()
+#losowa_y2 = losy()
+#zbior_elementow.append([losowa_x2, losowa_y2])
+#print(zbior_elementow)
+#print(zbior_elementow[0])
+#print(zbior_elementow[1])
+#print('pierwsze x: ',losowa_x1, 'pierwsze y: ', losowa_y1)
+#odleglosc = dystans(zbior_elementow[0], zbior_elementow[1])
+#if odleglosc >= 100:
+#        ilosc_losowych += 1
+#print('Propozyjca punktu: x:', losowa_x2, 'nowa y: ', losowa_y2)
+#print(f'Odległość: {odleglosc}') #string injection
+odleglosc = 0 #zeby sie nie czepial
+ilosc_losowych = 1
+#dodajemy 4 pkt
+zbior_elementow.append(losowy_punkt())
+zbior_elementow.append(losowy_punkt())
+zbior_elementow.append(losowy_punkt())
+zbior_elementow.append(losowy_punkt()) #5ty punkt dodany do zbioru
+dziala = True
+while dziala:
+    #generujemy dodatkowy punkt
+    zbior_odleglosci = []
+    z = 0
+    for i in range(4):
+        z += 1
+        zbior_odleglosci.append(dystans(zbior_elementow[0],zbior_elementow[z]))
+    print('zbior_odleglosci:', zbior_odleglosci)
+    for d in zbior_odleglosci:
+        if d < 100:
+            zbior_elementow = [pierwszy_punkt]
+            zbior_elementow.append(losowy_punkt())
+            zbior_elementow.append(losowy_punkt())
+            zbior_elementow.append(losowy_punkt())
+            zbior_elementow.append(losowy_punkt())
+            break
+        else:
+            dziala = False
+    
+print(zbior_elementow)
 
 class Frog(pygame.sprite.Sprite):
 	def __init__(self, pos_x, pos_y):
