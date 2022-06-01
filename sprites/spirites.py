@@ -27,11 +27,19 @@ def losy():
     return int(random() * 600)
 def losowy_punkt():
     return [int(random() * 800), int(random() * 600)]
-zbior_elementow = []
-#losowa_x1 = losx()
-#losowa_y1 = losy()
-pierwszy_punkt = losowy_punkt()
-zbior_elementow.append(pierwszy_punkt) #dodaliśmy 1den punkt do zbioru (wsp. x oraz y)
+
+def ilosc_odleglosci_w_zbiorze_punktow(x):
+    suma = 0
+    while x !=0:
+        x -= 1
+        suma += x
+    return suma
+print('ilosc_odleglosci_w_zbiorze_punktow: ', ilosc_odleglosci_w_zbiorze_punktow(5))
+def dodaj_punkty(ilosc):
+    for i in range(ilosc):
+        zbior_elementow.append(losowy_punkt())
+
+
 #print(zbior_elementow)
 #print('losowy pkt: ', losowy_punkt())
 #ilosc_losowych = 1
@@ -47,34 +55,34 @@ zbior_elementow.append(pierwszy_punkt) #dodaliśmy 1den punkt do zbioru (wsp. x 
 #        ilosc_losowych += 1
 #print('Propozyjca punktu: x:', losowa_x2, 'nowa y: ', losowa_y2)
 #print(f'Odległość: {odleglosc}') #string injection
-odleglosc = 0 #zeby sie nie czepial
-ilosc_losowych = 1
+
 #dodajemy 4 pkt
-zbior_elementow.append(losowy_punkt())
-zbior_elementow.append(losowy_punkt())
-zbior_elementow.append(losowy_punkt())
-zbior_elementow.append(losowy_punkt()) #5ty punkt dodany do zbioru
-dziala = True
-while dziala:
-    #generujemy dodatkowy punkt
+zbior_elementow = []
+zbior_prawd = 0
+ilosc_punktow = 15 #ile punktow losowo dodac
+odleglosc_puntkow = 50 #minimalna odleglosc miedzy wszystkimi punktami
+while zbior_prawd != ilosc_odleglosci_w_zbiorze_punktow(ilosc_punktow): #dla 5ciu punktów ilość odległóści między punktami to 4+3+2+1 = 10
     zbior_odleglosci = []
+    zbior_elementow = []
+    dodaj_punkty(ilosc_punktow) #dodajemy 5 nowych puntkow do zbior_elementow
+    zbior_punktow = zbior_elementow[:] #zapisujemy wynik w dodatkowej zmiennej
     z = 0
-    for i in range(4):
-        z += 1
-        zbior_odleglosci.append(dystans(zbior_elementow[0],zbior_elementow[z]))
+    for i in range(len(zbior_elementow)-1):
+        z = 0    
+        for i in range(len(zbior_elementow)-1):
+            z += 1
+            zbior_odleglosci.append(dystans(zbior_elementow[0],zbior_elementow[z]))
+        zbior_elementow.pop(0) #ta funkcja psuje nam oryginalny zbior - stad
+        #koniecznosc zapisania oryginalnych punktow w dodatkowym zbiorze
     print('zbior_odleglosci:', zbior_odleglosci)
-    for d in zbior_odleglosci:
-        if d < 100:
-            zbior_elementow = [pierwszy_punkt]
-            zbior_elementow.append(losowy_punkt())
-            zbior_elementow.append(losowy_punkt())
-            zbior_elementow.append(losowy_punkt())
-            zbior_elementow.append(losowy_punkt())
-            break
+    zbior_prawd = 0
+    for d in zbior_odleglosci: #odleglosc miedzy pierwszym a reszta punktow
+        if d < odleglosc_puntkow:
+            print("za mało")
         else:
-            dziala = False
+            zbior_prawd += 1
     
-print(zbior_elementow)
+print("Zbiór punktow: ", zbior_punktow)
 
 class Frog(pygame.sprite.Sprite):
 	def __init__(self, pos_x, pos_y):
@@ -173,6 +181,12 @@ klocek1=Klocek(400,00)
 klocek2=Klocek(411,200)
 klocek3=Klocek(404,100)
 klocek4=Klocek(410,320)
+#for klocek in zbior_punktow:
+    #klocuszek+i = Klocek(klocek[0], klocek[1])
+var_holder = {}
+for i in range(10):
+    var_holder['my_var_' + str(i)] = "iterationNumber=="+str(i)
+print('var_holder:', var_holder)
 frog = Frog(200,200)
 enemy.rect.x = 100
 enemy.rect.y = 100
